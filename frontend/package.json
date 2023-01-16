@@ -23,6 +23,7 @@
     "@types/react-dom": "18.0.10",
     "framer-motion": "^8.4.3",
     "graphql": "^16.6.0",
+    "graphql-ws": "^5.11.2",
     "next": "13.1.2",
     "next-auth": "^4.18.8",
     "react": "18.2.0",
