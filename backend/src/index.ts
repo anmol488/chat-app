@@ -39,8 +39,6 @@ async function main() {
       schema,
       context: async (ctx: SubscriptionContext) => {
         if (ctx.connectionParams && ctx.connectionParams.session) {
-          console.log("SERVER CONTEXT", ctx.connectionParams);
-
           const { session } = ctx.connectionParams;
           return { session, prisma, pubsub };
         }
