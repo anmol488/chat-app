@@ -11,24 +11,42 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import UserOperations from "@/graphql/operations/user";
-import { useLazyQuery } from "@apollo/client";
-import { SearchedUser, SearchUsersData, SearchUsersInput } from "@/utils/types";
+import ConversationOperations from "@/graphql/operations/conversation";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import {
+  CreateConversationData,
+  CreateConversationInput,
+  SearchedUser,
+  SearchUsersData,
+  SearchUsersInput,
+} from "@/utils/types";
 import UserSearchList from "./UserSearchList";
 import ParticipantList from "./ParticipantList";
 import { toast } from "react-hot-toast";
+import { Session } from "next-auth";
+import { useRouter } from "next/router";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
+  session: Session;
 }
 
-function ConversationModal({ isOpen, onClose }: ModalProps) {
+function ConversationModal({ isOpen, onClose, session }: ModalProps) {
+  const {
+    user: { id: userId },
+  } = session;
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [participants, setParticipants] = useState<Array<SearchedUser>>([]);
   const [searchUsers, { data, loading, error }] = useLazyQuery<
     SearchUsersData,
     SearchUsersInput
   >(UserOperations.Queries.searchUsers);
+  const [createConversation, { loading: createConversationLoading }] =
+    useMutation<CreateConversationData, CreateConversationInput>(
+      ConversationOperations.Mutations.createConversation
+    );
 
   const onSearchUsernames = (event: React.FormEvent) => {
     event.preventDefault();
@@ -46,9 +64,29 @@ function ConversationModal({ isOpen, onClose }: ModalProps) {
   };
 
   const onCreateConversation = async () => {
+    const participantIds = [userId, ...participants.map((p) => p.id)];
     try {
+      const { data } = await createConversation({
+        variables: {
+          participantIds,
+        },
+      });
+
+      if (!data?.createConversation) {
+        throw new Error("Failed to create conversation");
+      }
+
+      const {
+        createConversation: { conversationId },
+      } = data;
+
+      router.push({ query: { conversationId } });
+      setParticipants([]);
+      setUsername("");
+      onClose();
+
+      toast.success("Conversation successfully created 💪");
     } catch (error: any) {
-      console.log("error", error);
       toast.error(error?.message);
     }
   };
@@ -91,6 +129,7 @@ function ConversationModal({ isOpen, onClose }: ModalProps) {
                   width="100%"
                   mt={6}
                   onClick={onCreateConversation}
+                  isLoading={createConversationLoading}
                 >
                   Create conversation
                 </Button>

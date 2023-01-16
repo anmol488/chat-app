@@ -28,7 +28,7 @@ function ConversationList({ session }: ConversationListProps) {
           Find or start a conversation
         </Text>
       </Button>
-      <ConversationModal isOpen={isOpen} onClose={onClose} />
+      <ConversationModal isOpen={isOpen} onClose={onClose} session={session} />
     </Box>
   );
 }
