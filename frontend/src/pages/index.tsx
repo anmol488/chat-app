@@ -16,7 +16,7 @@ const Home: NextPage = () => {
   return (
     <Box>
       <Head>
-        <title>Login</title>
+        <title>MyBlazingApp</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
