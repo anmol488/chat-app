@@ -2,8 +2,8 @@ import { Box } from "@chakra-ui/react";
 import type { NextPage, NextPageContext } from "next";
 import { getSession, useSession } from "next-auth/react";
 import Head from "next/head";
-import Auth from "../components/Auth/Auth";
-import Chat from "../components/Chat/Chat";
+import Auth from "@/components/Auth/Auth";
+import Chat from "@/components/Chat/Chat";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
