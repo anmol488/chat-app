@@ -1,4 +1,8 @@
-import { ConversationPopulated, GraphQLContext } from "../../utils/types";
+import {
+  ConversationCreatedSubscriptionPayload,
+  ConversationPopulated,
+  GraphQLContext,
+} from "../../utils/types";
 import { GraphQLError } from "graphql";
 import { Prisma } from "@prisma/client";
 import { withFilter } from "graphql-subscriptions";
@@ -108,10 +112,6 @@ const resolvers = {
     },
   },
 };
-
-export interface ConversationCreatedSubscriptionPayload {
-  conversationCreated: ConversationPopulated;
-}
 
 export const participantPopulated =
   Prisma.validator<Prisma.ConversationParticipantInclude>()({
