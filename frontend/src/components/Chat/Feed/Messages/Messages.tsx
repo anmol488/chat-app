@@ -1,9 +1,15 @@
 import { Flex, Stack } from "@chakra-ui/react";
 import MessageOperations from "@/graphql/operations/message";
 import { useQuery } from "@apollo/client";
-import { MessagesData, MessagesVariables } from "@/utils/types";
+import {
+  MessagesData,
+  MessageSubscriptionData,
+  MessagesVariables,
+} from "@/utils/types";
 import { toast } from "react-hot-toast";
 import SkeletonLoader from "@/components/Common/SkeletonLoader";
+import { useEffect } from "react";
+import MessageItem from "./MessageItem";
 
 interface MessagesProps {
   userId: string;
@@ -21,6 +27,33 @@ function Messages({ userId, conversationId }: MessagesProps) {
     },
   });
 
+  const subscribeToMoreMessages = (conversationId: string) => {
+    return subscribeToMore({
+      document: MessageOperations.Subscription.messageSent,
+      variables: {
+        conversationId,
+      },
+      updateQuery: (prev, { subscriptionData }: MessageSubscriptionData) => {
+        if (!subscriptionData) return prev;
+
+        const newMessage = subscriptionData.data.messageSent;
+
+        return Object.assign({}, prev, {
+          messages:
+            newMessage.sender.id === userId
+              ? prev.messages
+              : [newMessage, ...prev.messages],
+        });
+      },
+    });
+  };
+
+  useEffect(() => {
+    const unsubscribe = subscribeToMoreMessages(conversationId);
+
+    return () => unsubscribe();
+  }, [conversationId]);
+
   if (error) {
     return null;
   }
@@ -35,8 +68,11 @@ function Messages({ userId, conversationId }: MessagesProps) {
       {data?.messages && (
         <Flex direction="column-reverse" overflowY="scroll" height="100%">
           {data.messages.map((message) => (
-            // <MessageItem />
-            <div>{message.body}</div>
+            <MessageItem
+              key={message.id}
+              message={message}
+              sentByMe={message.sender.id === userId}
+            />
           ))}
         </Flex>
       )}

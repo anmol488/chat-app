@@ -13,8 +13,8 @@ import enUS from "date-fns/locale/en-US";
 import React, { useState } from "react";
 import { GoPrimitiveDot } from "react-icons/go";
 import { MdDeleteOutline } from "react-icons/md";
-import { BiLogOut } from "react-icons/bi";
-import { AiOutlineEdit } from "react-icons/ai";
+// import { BiLogOut } from "react-icons/bi";
+// import { AiOutlineEdit } from "react-icons/ai";
 import { formatUsernames } from "../../../utils/functions";
 import { ConversationPopulated } from "../../../../../backend/src/utils/types";
 
@@ -30,10 +30,10 @@ interface ConversationItemProps {
   conversation: ConversationPopulated;
   onClick: () => void;
   isSelected: boolean;
-  //   hasSeenLatestMessage: boolean | undefined;
+  hasSeenLatest: boolean | undefined;
   //   onDeleteConversation: (conversationId: string) => void;
   //   onEditConversation?: () => void;
-  //   hasSeenLatestMessage?: boolean;
+  //   hasSeenLatest?: boolean;
   //   selectedConversationId?: string;
   //   onLeaveConversation?: (conversation: ConversationPopulated) => void;
 }
@@ -43,7 +43,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
   conversation,
   onClick,
   isSelected,
-  //   hasSeenLatestMessage,
+  hasSeenLatest,
   //   onDeleteConversation,
   //   selectedConversationId,
   //   onEditConversation,
@@ -76,7 +76,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
     >
       <Menu isOpen={menuOpen} onClose={() => setMenuOpen(false)}>
         <MenuList bg="#2d2d2d">
-          <MenuItem
+          {/* <MenuItem
             icon={<AiOutlineEdit fontSize={20} />}
             onClick={(event) => {
               event.stopPropagation();
@@ -86,7 +86,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
             _hover={{ bg: "whiteAlpha.300" }}
           >
             Edit
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem
             icon={<MdDeleteOutline fontSize={20} />}
             onClick={(event) => {
@@ -122,9 +122,9 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
         </MenuList>
       </Menu>
       <Flex position="absolute" left="-6px">
-        {/* {hasSeenLatestMessage === false && (
+        {hasSeenLatest === false && (
           <GoPrimitiveDot fontSize={18} color="#6B46C1" />
-        )} */}
+        )}
       </Flex>
       <Avatar />
       <Flex justify="space-between" width="80%" height="100%">

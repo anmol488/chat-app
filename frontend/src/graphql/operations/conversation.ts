@@ -34,12 +34,29 @@ export default {
         }
       }
     `,
+    markConversationAsRead: gql`
+      mutation MarkConversationAsRead(
+        $userId: String!
+        $conversationId: String!
+      ) {
+        markConversationAsRead(userId: $userId, conversationId: $conversationId)
+      }
+    `,
   },
   Subscriptions: {
     conversationCreated: gql`
       subscription ConversationCreated {
         conversationCreated {
           ${ConversationFields}
+        }
+      }
+    `,
+    conversationUpdated: gql`
+      subscription ConversationUpdated {
+        conversationUpdated {
+          conversation {
+            ${ConversationFields}
+          }
         }
       }
     `,

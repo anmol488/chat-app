@@ -9,7 +9,7 @@ import ConversationModal from "./Modal/ConversationModal";
 interface ConversationListProps {
   session: Session;
   conversations: Array<ConversationPopulated>;
-  onViewConversation: (conversationId: string) => void;
+  onViewConversation: (conversationId: string, hasSeenLatest: boolean) => void;
 }
 
 function ConversationList({
@@ -27,6 +27,10 @@ function ConversationList({
     user: { id: userId },
   } = session;
 
+  const sortedConversations = [...conversations].sort(
+    (a, b) => b.updatedAt.valueOf() - a.updatedAt.valueOf()
+  );
+
   return (
     <Box width="100%">
       <Button
@@ -43,15 +47,28 @@ function ConversationList({
         </Text>
       </Button>
       <ConversationModal isOpen={isOpen} onClose={onClose} session={session} />
-      {conversations.map((conversation) => (
-        <ConversationItem
-          key={conversation.id}
-          userId={userId}
-          conversation={conversation}
-          onClick={() => onViewConversation(conversation.id)}
-          isSelected={conversation.id === router.query.conversationId}
-        />
-      ))}
+      {sortedConversations.map((conversation) => {
+        const participant = conversation.participants.find(
+          (p) => p.user.id === userId
+        );
+
+        if (participant === undefined) {
+          throw new TypeError("Participant is undefined");
+        }
+
+        return (
+          <ConversationItem
+            key={conversation.id}
+            userId={userId}
+            conversation={conversation}
+            onClick={() =>
+              onViewConversation(conversation.id, participant?.hasSeenLatest)
+            }
+            hasSeenLatest={participant.hasSeenLatest}
+            isSelected={conversation.id === router.query.conversationId}
+          />
+        );
+      })}
     </Box>
   );
 }
