@@ -31,7 +31,7 @@ interface ConversationItemProps {
   onClick: () => void;
   isSelected: boolean;
   hasSeenLatest: boolean | undefined;
-  //   onDeleteConversation: (conversationId: string) => void;
+  onDeleteConversation: (conversationId: string) => void;
   //   onEditConversation?: () => void;
   //   hasSeenLatest?: boolean;
   //   selectedConversationId?: string;
@@ -44,7 +44,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
   onClick,
   isSelected,
   hasSeenLatest,
-  //   onDeleteConversation,
+  onDeleteConversation,
   //   selectedConversationId,
   //   onEditConversation,
   //   onLeaveConversation,
@@ -91,7 +91,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
             icon={<MdDeleteOutline fontSize={20} />}
             onClick={(event) => {
               event.stopPropagation();
-              //   onDeleteConversation(conversation.id);
+              onDeleteConversation(conversation.id);
             }}
             bg="#2d2d2d"
             _hover={{ bg: "whiteAlpha.300" }}

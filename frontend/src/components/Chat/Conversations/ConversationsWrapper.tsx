@@ -3,7 +3,11 @@ import { Session } from "next-auth";
 import ConversationList from "./ConversationList";
 import ConversationOperations from "@/graphql/operations/conversation";
 import { gql, useMutation, useQuery, useSubscription } from "@apollo/client";
-import { ConversationsData, ConversationUpdatedData } from "@/utils/types";
+import {
+  ConversationDeletedData,
+  ConversationsData,
+  ConversationUpdatedData,
+} from "@/utils/types";
 import {
   ConversationPopulated,
   ParticipantPopulated,
@@ -60,6 +64,39 @@ function ConversationsWrapper({ session }: ConversationsWrapperProps) {
         if (currentlyViewingConversation) {
           onViewConversation(conversationId, false);
         }
+      },
+    }
+  );
+
+  useSubscription<ConversationDeletedData, null>(
+    ConversationOperations.Subscriptions.conversationDeleted,
+    {
+      onData: ({ client, data }) => {
+        const { data: subscriptionData } = data;
+
+        if (!subscriptionData) return;
+
+        const existing = client.readQuery<ConversationsData>({
+          query: ConversationOperations.Queries.conversations,
+        });
+
+        if (!existing) return;
+
+        const { conversations } = existing;
+        const {
+          conversationDeleted: { id: deletedConversationId },
+        } = subscriptionData;
+
+        client.writeQuery<ConversationsData>({
+          query: ConversationOperations.Queries.conversations,
+          data: {
+            conversations: conversations.filter(
+              (conversation) => conversation.id !== deletedConversationId
+            ),
+          },
+        });
+
+        router.push("/");
       },
     }
   );
@@ -164,7 +201,7 @@ function ConversationsWrapper({ session }: ConversationsWrapperProps) {
 
   return (
     <Box
-      width={{ base: "100%", md: "400px" }}
+      width={{ base: "100%", md: "430px" }}
       bg="whiteAlpha.50"
       flexDirection="column"
       gap={4}
