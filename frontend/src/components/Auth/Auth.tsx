@@ -58,7 +58,7 @@ function Auth({ session, reloadSession }: AuthProps) {
       variants={fadeAnimation}
     >
       <Center height="100vh">
-        <Stack spacing={8} align="center">
+        <Stack spacing={8} align="center" width="auto">
           {session ? (
             <>
               <Text fontSize="3xl" fontWeight={500}>
@@ -84,9 +84,9 @@ function Auth({ session, reloadSession }: AuthProps) {
           ) : (
             <>
               <Image height="150px" src="/chat.png" />
-              <Text width="60%" align="center" fontWeight={500}>
-                Real-time chat website for students. Stay connected like never
-                before! 🚀
+              <Text width="55%" align="center" fontWeight={500}>
+                Real-time chat & discussion forum website for students. Stay
+                connected like never before! 🚀
               </Text>
               <Button
                 onClick={() => signIn("google")}

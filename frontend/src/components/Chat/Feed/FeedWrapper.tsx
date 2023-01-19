@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Center, Flex, Text } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
 import MessagesHeader from "./Messages/Header";
@@ -36,7 +36,11 @@ function FeedWrapper({ session }: FeedWrapperProps) {
           <MessageInput session={session} conversationId={conversationId} />
         </>
       ) : (
-        <div>No conversation selected</div>
+        <Center height="100vh">
+          <Text fontSize="3xl" fontWeight={500}>
+            No conversation selected
+          </Text>
+        </Center>
       )}
     </Flex>
   );

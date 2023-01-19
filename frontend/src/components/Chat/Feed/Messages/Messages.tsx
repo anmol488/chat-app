@@ -1,4 +1,4 @@
-import { Flex, Stack } from "@chakra-ui/react";
+import { Flex, SkeletonCircle, Stack } from "@chakra-ui/react";
 import MessageOperations from "@/graphql/operations/message";
 import { useQuery } from "@apollo/client";
 import {
@@ -7,7 +7,6 @@ import {
   MessagesVariables,
 } from "@/utils/types";
 import { toast } from "react-hot-toast";
-import SkeletonLoader from "@/components/Common/SkeletonLoader";
 import { useEffect } from "react";
 import MessageItem from "./MessageItem";
 
@@ -60,11 +59,6 @@ function Messages({ userId, conversationId }: MessagesProps) {
 
   return (
     <Flex direction="column" justify="flex-end" overflow="hidden">
-      {loading && (
-        <Stack spacing={4} px={4}>
-          <SkeletonLoader count={4} height="60px" />
-        </Stack>
-      )}
       {data?.messages && (
         <Flex direction="column-reverse" overflowY="scroll" height="100%">
           {data.messages.map((message) => (

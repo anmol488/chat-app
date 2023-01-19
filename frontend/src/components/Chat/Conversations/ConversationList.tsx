@@ -1,4 +1,4 @@
-import { Box, Button, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -9,6 +9,7 @@ import ConversationOperations from "@/graphql/operations/conversation";
 import { useMutation } from "@apollo/client";
 import toast from "react-hot-toast";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
 
 interface ConversationListProps {
   session: Session;
@@ -67,7 +68,7 @@ function ConversationList({
 
   return (
     <Box
-      width={{ base: "100%", md: "400px" }}
+      width={{ base: "100%", md: "380px" }}
       position="relative"
       height="100%"
       overflow="hidden"
@@ -81,9 +82,7 @@ function ConversationList({
         onClick={onOpen}
         width="100%"
       >
-        <Text textAlign="center" fontWeight={500}>
-          Find or start a conversation
-        </Text>
+        Find or start a conversation
       </Button>
       <ConversationModal isOpen={isOpen} onClose={onClose} session={session} />
       {sortedConversations.map((conversation) => {
@@ -109,19 +108,35 @@ function ConversationList({
           />
         );
       })}
-      <Box
+      <Link href="forum">
+        <Button
+          position="absolute"
+          bottom={54}
+          left={0}
+          width="100%"
+          px={4}
+          rounded="lg"
+          py={2}
+          zIndex={1}
+        >
+          Visit ReplyQL forum
+        </Button>
+      </Link>
+      <Button
         position="absolute"
         bottom={0}
         left={0}
         width="100%"
-        px={8}
+        px={4}
+        rounded="lg"
         py={2}
         zIndex={1}
+        bg="brand.100"
+        _hover={{ bg: "brand.200" }}
+        onClick={() => signOut()}
       >
-        <Button width="100%" onClick={() => signOut()}>
-          Logout
-        </Button>
-      </Box>
+        Logout
+      </Button>
     </Box>
   );
 }

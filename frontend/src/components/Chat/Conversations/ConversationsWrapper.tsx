@@ -14,7 +14,6 @@ import {
 } from "../../../../../backend/src/utils/types";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import SkeletonLoader from "@/components/Common/SkeletonLoader";
 import { toast } from "react-hot-toast";
 
 interface ConversationsWrapperProps {
@@ -201,7 +200,7 @@ function ConversationsWrapper({ session }: ConversationsWrapperProps) {
 
   return (
     <Box
-      width={{ base: "100%", md: "430px" }}
+      width={{ base: "100%", md: "400px" }}
       bg="whiteAlpha.50"
       flexDirection="column"
       gap={4}
@@ -209,15 +208,11 @@ function ConversationsWrapper({ session }: ConversationsWrapperProps) {
       px={3}
       display={{ base: conversationId ? "none" : "flex", md: "flex" }}
     >
-      {conversationsLoading ? (
-        <SkeletonLoader count={7} height="80px" />
-      ) : (
-        <ConversationList
-          session={session}
-          conversations={conversationsData?.conversations || []}
-          onViewConversation={onViewConversation}
-        />
-      )}
+      <ConversationList
+        session={session}
+        conversations={conversationsData?.conversations || []}
+        onViewConversation={onViewConversation}
+      />
     </Box>
   );
 }

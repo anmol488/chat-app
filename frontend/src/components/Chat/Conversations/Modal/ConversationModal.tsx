@@ -25,6 +25,7 @@ import ParticipantList from "./ParticipantList";
 import { toast } from "react-hot-toast";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
+import { trusted } from "mongoose";
 
 interface ModalProps {
   isOpen: boolean;
@@ -94,8 +95,8 @@ function ConversationModal({ isOpen, onClose, session }: ModalProps) {
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent bg="2d2d2d" p={4}>
+        <ModalOverlay backdropFilter="blur(10px)" />
+        <ModalContent bg="1c1c1c" p={4}>
           <ModalHeader>Create a conversation</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
