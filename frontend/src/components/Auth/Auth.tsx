@@ -62,7 +62,7 @@ function Auth({ session, reloadSession }: AuthProps) {
           {session ? (
             <>
               <Text fontSize="3xl" fontWeight={500}>
-                Welcome, {session.user.name} 🥳
+                Welcome 🥳
               </Text>
               <Input
                 fontWeight={500}

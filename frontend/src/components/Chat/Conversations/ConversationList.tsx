@@ -67,12 +67,7 @@ function ConversationList({
   };
 
   return (
-    <Box
-      width={{ base: "100%", md: "380px" }}
-      position="relative"
-      height="100%"
-      overflow="hidden"
-    >
+    <Box position="relative" height="100%" overflow="hidden">
       <Button
         py={2}
         px={4}
